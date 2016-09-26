@@ -35,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                <?= Html::a('Sign Up','https://php.net', array('target'=>'_self','class' => 'btn btn-primary','name' => 'SignUp-button')); ?>
             </div>
         </div>
 
@@ -43,5 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-lg-offset-1" style="color:#999;">
         You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
+        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
     </div>
 </div>
