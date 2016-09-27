@@ -9,7 +9,7 @@ use yii\helpers\Security;
 use yii\web\IdentityInterface;
 
 class SRCUser extends \app\components\db\ConfigurationActiveRecord implements IdentityInterface {
-{
+    
     public $NewPassword;
 
     public $frontend_permission_definitions = [
