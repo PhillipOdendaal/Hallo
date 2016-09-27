@@ -1,13 +1,19 @@
 <?php
 
-$params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '/db.php');
-
 $config = [
-    'id' => 'basic-console',
+    'id' => 'sourcev1-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+	//'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
+    'timeZone' => 'Africa/Johannesburg',
+    'modules' => [
+        'websocket' => [
+            'class' => 'app\modules\websocket\WebsocketModule'
+        ],
+        'console' => [
+            'class' => 'app\modules\console\ConsoleModule'
+        ]
+    ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -20,24 +26,15 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
     ],
-    'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
-        ],
-    ],
-    */
 ];
 
-if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-    ];
-}
+//defined("SRC_ENV") or die("SRC_ENV not defined.");'
+defined('SRC_ENV') or define('SRC_ENV', 'env/dev'); // local, dev, uat, prod
 
+$config_file_path = realpath(__DIR__ . '/' . SRC_ENV . '.php');
+if (!file_exists($config_file_path))
+    die('Configuration file for the "' . SRC_ENV . '" environment does not exist\n');
+
+require($config_file_path);
 return $config;
