@@ -21,11 +21,14 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
-        'js/currency.js',
-        'js/jquery.min.js',
+        'js/currencyConverter.js',
+        'js/jquery-3.1.1.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+    public $jsOptions = array(
+        'position' => \yii\web\View::POS_HEAD
+    );
 }
