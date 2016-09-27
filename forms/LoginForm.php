@@ -1,30 +1,26 @@
 <?php
 
-namespace app\models;
+namespace app\forms\site;
 
+use app\models\SRCUser;
+use Exception;
 use Yii;
 use yii\base\Model;
 
 /**
  * LoginForm is the model behind the login form.
- *
- * @property User|null $user This property is read-only.
- *
  */
-class LoginForm extends Model
-{
+class LoginForm extends Model {
+
     public $username;
     public $password;
     public $rememberMe = true;
-
     private $_user = false;
-
 
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['username', 'password'], 'required'],
             ['rememberMe', 'boolean'],
@@ -39,40 +35,48 @@ class LoginForm extends Model
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
-    {
+    public function validatePassword($attribute, $params) {
+
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
+                $this->password = "";
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     * @return boolean whether the user is logged in successfully
-     */
-    public function login()
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+    public function login() {
+        //$local_login = $_SERVER["REMOTE_ADDR"] == "127.0.0.1" || $_SERVER["REMOTE_ADDR"] == "::1";
+        $full_username = $this->username;
+        $this->username = $this->getUsername($this->username);
+
+        $user = SRCUser::findByUsername($this->username);
+    }
+
+    private function getUsername($fullUserName) {
+
+        if (strpos($fullUserName, "\\") !== false) {
+            $fullUserName = substr($fullUserName, strpos($fullUserName, "\\") + 1);
         }
-        return false;
+
+        $fullUserName = strtolower($fullUserName);
+
+        return $fullUserName;
     }
 
     /**
      * Finds user by [[username]]
      *
-     * @return User|null
+     * @return SRCUser|null
      */
-    public function getUser()
-    {
+    public function getUser() {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = SRCUser::findByUsername($this->username);
         }
 
         return $this->_user;
     }
+
 }
