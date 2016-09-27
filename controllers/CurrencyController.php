@@ -18,6 +18,14 @@ class CurrencyController extends Controller
 {
     public function actionIndex()
     {
+        //$this->registerJs( $this->renderPartial('currencyConverter.js') );
+        
+        $this->registerJsFile( 
+            'currencyConverter.js', 
+            ['\backend\assets\AppAsset'],  
+            ['position' => '\yii\web\View::POS_END']
+        );
+        
         $model = new Country();
         return $this->render('index', ['model' => $model]);
 

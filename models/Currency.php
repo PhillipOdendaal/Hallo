@@ -9,6 +9,7 @@ class Currency extends ActiveRecord
     public $code;
     public $can;
     public $amount;
+    public $displayCalc;
 
     /**
      * @inheritdoc
@@ -34,11 +35,13 @@ class Currency extends ActiveRecord
     public function attributeLabels()
     {
         return [
+            'currency_id' => 'Currency Value',
             'currency_code' => 'Currency Code',
             'currency_name' => 'Currency Name',
             'from' => 'Convert From',
             'to' => 'To',
             'amount' => 'Amount',
+            'displayCalc' => 'Calculated Amount',
         ];
     }
     /**
@@ -47,7 +50,7 @@ class Currency extends ActiveRecord
     public static function getCurrency()
     {
         $rows = (new \yii\db\Query())
-            ->select(['currency_code', 'currency_name'])
+            ->select(['currency_id', 'currency_name'])
             ->from('currency')
             ->limit(10)
             ->all();
