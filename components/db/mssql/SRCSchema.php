@@ -39,4 +39,5 @@ SQL;
 	//setting keys manually for now
 	$table->foreignKeys[] = ['users', 'fid' => 'uid'];
 
+    }
 }

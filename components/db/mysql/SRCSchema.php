@@ -79,3 +79,4 @@ SELECT * FROM information_schema.TRIGGERS T;
 SELECT * FROM information_schema.USER_PRIVILEGES U;
 SELECT * FROM information_schema.VIEWS V;
 */
+}
