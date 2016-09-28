@@ -3,7 +3,6 @@
 $config = [
     'id' => 'sourcev1-console',
     'basePath' => dirname(__DIR__),
-	//'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'timeZone' => 'Africa/Johannesburg',
     'modules' => [
@@ -29,10 +28,10 @@ $config = [
     ],
 ];
 
-//defined("SRC_ENV") or die("SRC_ENV not defined.");'
-defined('SRC_ENV') or define('SRC_ENV', 'env/dev'); // local, dev, uat, prod
+defined("SRC_ENV") or die("SRC_ENV not defined.");
+//defined('SRC_ENV') or define('SRC_ENV', 'dev'); // local, dev, uat, prod
 
-$config_file_path = realpath(__DIR__ . '/' . SRC_ENV . '.php');
+$config_file_path = realpath(__DIR__ . '/env/' . SRC_ENV . '.php');
 if (!file_exists($config_file_path))
     die('Configuration file for the "' . SRC_ENV . '" environment does not exist\n');
 

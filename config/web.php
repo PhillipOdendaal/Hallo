@@ -4,6 +4,7 @@ $config = [
     'id' => 'sourcev1',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    //'defaultRoute' => 'site/index',
     'components' => [
         'request' => [
             'cookieValidationKey' => 'SQZcoYKFfPjBQYjRpF1NKwfaRLrBJXD9',
@@ -12,7 +13,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\SRCUser',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -31,25 +32,26 @@ $config = [
             ],
         ],
         'urlManager' => [
-			'class' => 'yii\web\UrlManager',
+            'class' => 'yii\web\UrlManager',
             'showScriptName' => false,
             'enablePrettyUrl' => true,
             'rules' => [
                 'login' => 'site/login',
                 'logout' => 'site/logout',
-                'config' => 'config/default/index',
-                'config/<controller:\w+>/<id:\d+>' => 'config/<controller>/view',
-                'config/<controller:\w+>/<action:\w+>/<id:\d+>' => 'config/<controller>/<action>',
-                'config/<controller:\w+>/<action:\w+>' => 'config/<controller>/<action>',
-                'admin/<controller:\w+>/<id:\d+>' => 'admin/<controller>/view',
-                'admin/<controller:\w+>/<action:\w+>/<id:\d+>' => 'admin/<controller>/<action>',
-                'admin/<controller:\w+>/<action:\w+>' => 'admin/<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
-		'session' => [
+        'session' => [
             'class' => 'yii\web\DbSession',
             'db' => 'localdb',
+            //'db' => 'sourcev1',
+            
+            // 'class' => 'yii\mongodb\Session',
+            // 'db' => 'mymongodb',
+
+            // 'sessionTable' => 'session',
+            // 'sessionCollection' => 'my_session',
+			
             'timeout' => 7200
         ],
         'formatter' => [
@@ -57,7 +59,7 @@ $config = [
             'nullDisplay' => '',
         ],
     ],
-	'modules' => [
+    'modules' => [
         'config' => [
             'class' => 'app\modules\config\ConfigModule'
         ],
@@ -67,6 +69,8 @@ $config = [
         'envServerMap' => [
             'local' => 'localhost',
             'local-dev' => '127.0.0.1',
+            'local-uat' => '127.0.0.1',
+            'local-prod' => '127.0.0.1',
         ]
     ],
 ];
@@ -78,18 +82,21 @@ define("PAGE_SIZES", "5, 10, 15, 20, 25, 50, all");
  * Use YII_ENV_DEV
  -------------------------------------------------------------*/
 if (YII_ENV_DEV) {
+    /**
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
     ];
-	
-	$config['bootstrap'][] = 'gii';
+     */
+    $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        "allowedIPs" => ['127.0.0.1']
+        "allowedIPs" => ['127.0.0.1', 'localhost:8888']
     ];
-
-	$force_copy = isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" ? false : true;
+    /**
+    //$config["components"]["db"] = $config["components"]["sourcev1"];
+    */
+    $force_copy = isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" ? false : true;
 
     if ($force_copy) {
         $config['components']['assetManager']['forceCopy'] = true;
@@ -109,17 +116,19 @@ if (!file_exists($config_file_path))
 require($config_file_path);
 
 if (in_array(SRC_ENV, ['dev','uat','prod'])) {
-    foreach (['localdb', 'sourcev1', 'db'] as $dbname) {
+    foreach (['localdb', 'sourcev1'] as $dbname) {
         if (isset($config["components"][$dbname])) {
             $config["components"][$dbname]["enableSchemaCache"] = true;
             $config["components"][$dbname]["schemaCacheDuration"] = 60 * 60 * 6;
         }
     }
 }
-
+/**
 $config["components"]["sourcev1"]["on afterOpen"] = function($event) {
-    $event->sender->createCommand("SET CONCAT_NULL_YIELDS_NULL ON; SET ANSI_WARNINGS ON; SET ANSI_PADDING ON;")->execute();
+    //$event->sender->createCommand("SET ANSI_WARNINGS ON; SET ANSI_PADDING ON;")->execute();
+    //$event->sender->createCommand("SET CONCAT_NULL_YIELDS_NULL ON; SET ANSI_WARNINGS ON; SET ANSI_PADDING ON;")->execute();
 };
+/**/
 
 
 return $config;

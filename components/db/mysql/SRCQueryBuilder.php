@@ -1,8 +1,8 @@
 <?php
 
-namespace app\components\db\mssql;
+namespace app\components\db\mysql;
 
-class ESMQueryBuilder extends \yii\db\mssql\QueryBuilder {
+class SRCQueryBuilder extends \yii\db\mysql\QueryBuilder {
 
     public function buildLikeCondition($operator, $operands, &$params) {
 

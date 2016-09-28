@@ -4,7 +4,7 @@
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');
 defined('IS_WINDOWS_ENV') or define('IS_WINDOWS_ENV', strtoupper(substr(PHP_OS, 0, 3)) == "WIN");
-
+//
 defined('SRC_ENV') or define('SRC_ENV', 'dev'); // local, dev, uat, prod
 
 require(__DIR__ . '/../vendor/autoload.php');

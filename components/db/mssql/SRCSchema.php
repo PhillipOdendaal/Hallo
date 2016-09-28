@@ -2,7 +2,7 @@
 
 namespace app\components\db\mssql;
 
-class ESMSchema extends \yii\db\mssql\Schema {
+class SRCSchema extends \yii\db\mssql\Schema {
 
     public function createQueryBuilder() {
         return new SRCQueryBuilder($this->db);
